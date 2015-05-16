@@ -9,10 +9,11 @@
 ;;
 
 (defvar slflex-events
-  '("BOOLEAN" "INTEGER" "FLOAT" "STRING" "LONG" "DATE" "DATE_AND_TIME" "ARRAY" "TRUE" "FALSE" "NULL" "ENUM" "BYTE"))
+  '("BOOLEAN" "INTEGER" "FLOAT" "STRING" "LONG" "DATE" "TIME" "ARRAY" "TRUE" "FALSE" "NULL" "ENUM" "BYTE"))
 
 (defvar slflex-keywords
-    '("IF" "END IF" "ELSIF" "ELSE" "WHILE" "END WHILE"  "CASE" "END CASE" "RESULTS" "END RESULTS" "PARAMETERS" "END PARAMETERS" "SWITCH" "END SWITCH" "DEFAULT" "END DEFAULT" 
+    '("IF" "END IF" "ELSIF" "ELSE" "WHILE" "END WHILE" "CASE" "END CASE" "RESULTS" "END RESULTS" "PARAMETERS" "END PARAMETERS"
+      "SWITCH" "END SWITCH" "DEFAULT" "END DEFAULT" 
       "OR" "AND" "LEAVE" "THEN" "DO" "OF" "SIZE" "MANDATORY" "RETURN" "EXISTS" "NOT" "INSTANCE" "CALL" "ADMIN" "INTERFACE"
       "DIV" "MOD"))
 
@@ -61,8 +62,7 @@
      ( ,(regexp-opt slflex-keywords 'words) . font-lock-builtin-face)
      ( ,(regexp-opt slflex-events 'words) . font-lock-constant-face)
      ( ,(regexp-opt slflex-functions 'words) . font-lock-function-name-face)
-     ;;( ,(regexp-opt slflex-gacs 'words) . font-lock-preprocessor-face)
-     ("theGenericAccess[-_\\.A-Za-z0-9]+" . font-lock-preprocessor-face)
+     ("\\(theGenericAccess\\|\\<InputParameters\\|\\<tga\\|\\<CCS\\|\\<AdditionalResult\\|\\<Counters\\|\\<CheapSpot\\|\\<FBC\\|\\<HotCharge\\|\\<OnTouch\\|\\<QoS\\|\\<RatingInformation\\|\\<S[sS]7\\|\\<DTMF\\|\\<convChargingGA\\|\\<Const\\|\\<CallSupervision\\)[-_\\.A-Za-z0-9]+" . font-lock-preprocessor-face)
      )))
 
 (defconst slflex-syntax-table
