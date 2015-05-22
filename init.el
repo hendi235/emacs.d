@@ -15,29 +15,12 @@
 ;;;
 ;;;
 ;;; CUSTOM SET
-
-;;;
-;;;
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "Consolas" :foundry "outline" :slant normal :weight normal :height 113 :width normal)))))
-;;;
-;;;
-;;; Global key rebinding
-;;(global-set-key (kbd "C-x o") 'switch-window)
-(global-set-key (kbd "C-s") 'isearch-forward-regexp)
-(global-set-key (kbd "C-r") 'isearch-backward-regexp)
-(global-set-key (kbd "C-M-s") 'isearch-forward)
-(global-set-key (kbd "C-M-r") 'isearch-backward)
-(global-set-key (kbd "M-/") 'hippie-expand)
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-(global-set-key [f12] 'toggle-truncate-lines)
-;;;
-;;; No more scattering backup file(s)
-(setq backup-directory-alist `(("." . ,(concat user-emacs-directory "backups"))))
 ;;;
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -53,8 +36,8 @@
  '(ido-mode (quote both) nil (ido))
  '(package-archives
    (quote
-    (("marmalade" . "http://marmalade-repo.org/packages/")
-     ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")
+    (("melpa-stable" . "http://stable.melpa.org/packages/")
+;;     ("marmalade" . "http://marmalade-repo.org/packages/")
      ("gnu" . "http://elpa.gnu.org/packages/"))))
  '(package-selected-packages
    (quote
@@ -62,3 +45,18 @@
  '(save-place t)
  '(show-paren-mode t)
  '(tool-bar-mode nil))
+;;;
+;;; ==== MY CUSTOM SETTINGS MUST START HERE ====
+;;;
+;;; Global key rebinding
+;;(global-set-key (kbd "C-x o") 'switch-window)
+(global-set-key (kbd "C-s") 'isearch-forward-regexp)
+(global-set-key (kbd "C-r") 'isearch-backward-regexp)
+(global-set-key (kbd "C-M-s") 'isearch-forward)
+(global-set-key (kbd "C-M-r") 'isearch-backward)
+(global-set-key (kbd "M-/") 'hippie-expand)
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key [f12] 'toggle-truncate-lines)
+;;;
+;;; No more scattering backup file(s)
+(setq backup-directory-alist `(("." . ,(concat user-emacs-directory "backups"))))
