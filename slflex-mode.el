@@ -65,7 +65,7 @@
      (,(concat "\\(theGenericAccess\\|\\<InputParameter\\|\\<tga\\|\\<CCS\\|\\<AdditionalResult\\|"
                 "\\<Counters\\|\\<CheapSpot\\|\\<FBC\\|\\<HotCharge\\|\\<OnTouch\\|\\<QoS\\|"
                 "\\<RatingInformation\\|\\<S[sS]7\\|\\<DTMF\\|\\<convChargingGA\\|\\<Const\\|"
-                "\\<CallSupervision\\)[-_\\.A-Za-z0-9]+") . font-lock-warning-face)
+                "\\<CallSupervision\\|\\<SubsDM\\(FUS\\|DB\\)\\)[-_\\.A-Za-z0-9]+") . font-lock-warning-face)
      )))
 
 (defconst slflex-syntax-table
