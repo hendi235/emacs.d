@@ -29,6 +29,47 @@
   :ensure t)
 ;;
 ;;; ==== UI ====
+;; Select best available font
+(use-package dynamic-fonts
+  :ensure t
+  :config
+  (progn
+    (setq dynamic-fonts-preferred-monospace-fonts
+          '(
+            ;; Best fonts
+            ;"Source Code Pro"   ; https://github.com/adobe-fonts/source-code-pro
+            "Anonymous Pro" ; http://www.marksimonson.com/fonts/view/anonymous-pro
+            ;; Consolas and its free alternative.  Ok, but not my preference
+            ;"Inconsolata"
+            "Consolas"
+            ;; Also still kind of ok
+            "Fira Mono"
+            ;; System fonts, as last resort
+            ;"Menlo"
+            "DejaVu Sans Mono"
+            "Bitstream Vera Mono"
+            "Courier New")
+          dynamic-fonts-preferred-monospace-point-size (pcase system-type
+                                                         (`darwin 13)
+                                                         (_ 12))
+          dynamic-fonts-preferred-proportional-fonts
+          '(
+            ;; Best, from
+            ;; https://www.mozilla.org/en-US/styleguide/products/firefox-os/typeface/
+            ;"Fira Sans"
+            ;; System fonts, as last resort
+            "Helvetica"
+            "Segoe UI"
+            "DejaVu Sans"
+            "Bitstream Vera"
+            "Tahoma"
+            "Verdana"
+            "Arial Unicode MS"
+            "Arial")
+          dynamic-fonts-preferred-proportional-point-size (pcase system-type
+                                                            (`darwin 13)
+                                                            (_ 12)))
+    (dynamic-fonts-setup)))
 ;;; Themes
 (use-package spacegray   ; current active theme
   ;:disabled t
