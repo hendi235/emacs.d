@@ -24,7 +24,41 @@
 ;(require 'bind-key)
 ;(require 'diminish)
 ;;
+;; Search init file for bugs
+(use-package bug-hunter
+  :ensure t)
 ;;
+;;; ==== UI ====
+;;; Themes
+(use-package spacegray   ; current active theme
+  ;:disabled t
+  :ensure spacegray-theme
+  :defer t
+  :init (load-theme 'spacegray 'no-confirm))
+;;
+(use-package solarized
+  :disabled t
+  :ensure solarized-theme
+  :defer t
+  :init (load-theme 'solarized-dark 'no-confirm)
+  :config
+  ;; Disable variable pitch fonts in Solarized theme
+  (setq solarized-use-variable-pitch nil
+        ;; Don't add too much colours to the fringe
+        ;solarized-emphasize-indicators nil
+        ;; I find different font sizes irritating.
+        ;solarized-height-minus-1 1.0
+        ;solarized-height-plus-1 1.0
+        ;solarized-height-plus-2 1.0
+        ;solarized-height-plus-3 1.0
+        ;solarized-height-plus-4 1.0
+        ))
+;;
+(use-package subatomic
+  :disabled t
+  :ensure subatomic-theme
+  :defer t
+  :init (load-theme 'subatomic 'no-confirm))
 ;;; ==== COMMON SETTING ====
 (column-number-mode t)
 ;; no beep sound
