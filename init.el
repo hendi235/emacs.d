@@ -21,8 +21,8 @@
 (eval-when-compile
   (require 'use-package))
 ;; use-package dependencies, but don't know yet if being disabled has any consequences
-;(require 'bind-key)
-;(require 'diminish)
+(require 'bind-key)
+(require 'diminish)
 ;;
 ;; Search init file for bugs
 (use-package bug-hunter
@@ -38,7 +38,7 @@
           '(
             ;; Best fonts
             ;"Source Code Pro"   ; https://github.com/adobe-fonts/source-code-pro
-            "Anonymous Pro" ; http://www.marksimonson.com/fonts/view/anonymous-pro
+            ;"Anonymous Pro" ; http://www.marksimonson.com/fonts/view/anonymous-pro
             ;; Consolas and its free alternative.  Ok, but not my preference
             ;"Inconsolata"
             "Consolas"
@@ -51,7 +51,7 @@
             "Courier New")
           dynamic-fonts-preferred-monospace-point-size (pcase system-type
                                                          (`darwin 13)
-                                                         (_ 12))
+                                                         (_ 10))
           dynamic-fonts-preferred-proportional-fonts
           '(
             ;; Best, from
@@ -68,9 +68,9 @@
             "Arial")
           dynamic-fonts-preferred-proportional-point-size (pcase system-type
                                                             (`darwin 13)
-                                                            (_ 12)))
+                                                            (_ 10)))
     (dynamic-fonts-setup)))
-;;; Themes
+;; Themes
 (use-package spacegray   ; current active theme
   ;:disabled t
   :ensure spacegray-theme
@@ -88,19 +88,28 @@
         ;; Don't add too much colours to the fringe
         ;solarized-emphasize-indicators nil
         ;; I find different font sizes irritating.
-        ;solarized-height-minus-1 1.0
-        ;solarized-height-plus-1 1.0
-        ;solarized-height-plus-2 1.0
-        ;solarized-height-plus-3 1.0
-        ;solarized-height-plus-4 1.0
-        ))
+        solarized-height-minus-1 1.0
+        solarized-height-plus-1 1.0
+        solarized-height-plus-2 1.0
+        solarized-height-plus-3 1.0
+        solarized-height-plus-4 1.0))
 ;;
 (use-package subatomic
   :disabled t
   :ensure subatomic-theme
   :defer t
   :init (load-theme 'subatomic 'no-confirm))
-;;; ==== COMMON SETTING ====
+;;
+;; Make buffer name unique
+(use-package uniquify
+  :config (setq uniquify-buffer-name-style 'forward))
+;;
+;; Line number in display margin
+(use-package nlinum
+  :ensure t
+  :bind (("C-c t l" . nlinum-mode)))
+;;
+;; show column number
 (column-number-mode t)
 ;; no beep sound
 (setq visible-bell t)
@@ -109,6 +118,50 @@
 ;; Get rid of tool bar
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
+;;; ==== BEHAVIOR ====
+;; Move between windows with Shift+Arrow
+(use-package windmove
+  :bind (("S-<left>"  . windmove-left)
+         ("S-<right>" . windmove-right)
+         ("S-<up>"    . windmove-up)
+         ("S-<down>"  . windmove-down)))
+;; Helm
+(use-package helm
+  :ensure t
+  :bind (
+         ;; Replace some standard bindings with Helm equivalents
+         ([remap execute-extended-command] . helm-M-x)
+         ([remap find-file]                . helm-find-files)
+         ([remap switch-to-buffer]         . helm-mini)
+         ([remap yank-pop]                 . helm-show-kill-ring)
+         ([remap insert-register]          . helm-register)
+         ([remap occur]                    . helm-occur)
+         ;; Special helm bindings
+         ("C-c b b"                        . helm-resume)
+         ("C-c b C"                        . helm-colors)
+         ("C-c b *"                        . helm-calcul-expression)
+         ("C-c b 8"                        . helm-ucs)
+         ("C-c b M-:"                      . helm-eval-expression-with-eldoc)
+         ;; Helm features in other maps
+         ("C-c i"                          . helm-semantic-or-imenu)
+         ("C-c h a"                        . helm-apropos)
+         ("C-c h e"                        . helm-info-emacs)
+         ("C-c h i"                        . helm-info-at-point)
+         ("C-c h m"                        . helm-man-woman)
+         ("C-c f r"                        . helm-recentf)
+         ("C-c f l"                        . helm-locate-library))
+  :init (progn (helm-mode 1)
+
+               (with-eval-after-load 'helm-config
+                 (warn "`helm-config' loaded! Get rid of it ASAP!")))
+  :config (setq helm-split-window-in-side-p t)
+  :diminish (helm-mode))
+(use-package helm-buffers
+  :ensure helm
+  :defer t
+  :config (setq helm-buffers-fuzzy-matching t))
+;;; ==== COMMON SETTING ====
+
 ;;
 (setq default-tab-width 4)
 (setq-default indent-tabs-mode nil)
