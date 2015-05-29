@@ -17,6 +17,7 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
+;;;
 ;;; Requires
 (eval-when-compile
   (require 'use-package))
@@ -25,6 +26,7 @@
 (require 'diminish)
 ;;
 ;; Search init file for bugs
+;; usage: M-x bug-hunter-init-file RET RET
 (use-package bug-hunter
   :ensure t)
 ;;
@@ -70,7 +72,7 @@
                                                             (`darwin 13)
                                                             (_ 10)))
     (dynamic-fonts-setup)))
-;; Themes
+;;; THEMES
 (use-package spacegray   ; current active theme
   ;:disabled t
   :ensure spacegray-theme
@@ -103,8 +105,6 @@
 ;; Make buffer name unique
 (use-package uniquify
   :config (setq uniquify-buffer-name-style 'forward))
-;;
-
 ;;
 ;; show column number
 (column-number-mode t)
@@ -153,17 +153,20 @@
                  (warn "`helm-config' loaded! Get rid of it ASAP!")))
   :config (setq helm-split-window-in-side-p t)
   :diminish (helm-mode))
+;;
 (use-package helm-buffers
   :ensure helm
   :defer t
   :config (setq helm-buffers-fuzzy-matching t))
 
-;;; File Handling
+;;; FILE HANDLING
 ;; warn when opening files bigger than 200MB
 (setq large-file-warning-threshold 200000000)
+;;
 ;; Keep backup and auto save files out of the way
 (setq backup-directory-alist `((".*" . ,(locate-user-emacs-file ".backup")))
       auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+;;
 ;; Access remote files
 (use-package tramp
   :defer t
@@ -206,7 +209,6 @@
     (when (eq system-type 'darwin)
       ;; OS X bsdtar is mostly compatible with GNU Tar
       (setq dired-guess-shell-gnutar "tar"))))
-;;
 ;;
 (use-package helm-files
   :ensure helm
@@ -258,10 +260,22 @@
 ;; Visit images as images
 (use-package image-file
   :init (auto-image-file-mode))
-
-;;; Navigation and scrolling
-; Never recenter the screen while scrolling
+;;
+;;; NAVIGATION AND SCROLL
+;;
+;; Never recenter the screen while scrolling
 (setq scroll-conservatively 1000)
+;;
+;; This package is required by ace-window
+(use-package avy
+    :ensure t)
+;;
+;; Jump to characters in buffers.
+;(use-package avy-jump
+;  :ensure avy
+;  :bind (("C-c j s" . avy-isearch)
+;         ("C-c j j" . avy-goto-char-2)
+;         ("C-c j w" . avy-goto-word-1)))
 ;;
 ;; Fast window switching
 (use-package ace-window
@@ -288,7 +302,7 @@
 ;; Custom regexp highlights
 (use-package hi-lock
   :init (global-hi-lock-mode))
-
+;;
 ;;; SKELETON, COMPLETION, AND EXPANSION
 ;; Powerful expansion and completion
 (use-package hippie-exp
@@ -304,12 +318,36 @@
           try-expand-list
           try-complete-lisp-symbol-partially
           try-complete-lisp-symbol)))
-
+;;
 ;;; SEARCHING
 ;; Search buffers
 (use-package isearch
   :bind (("C-c s s" . isearch-forward-symbol-at-point)))
-
+;;
+;; Search code in files/projects
+;; usage:  M-x pt-regexp  or  M-x projectile-pt
+(use-package pt
+  :ensure t
+  :bind (("C-c a d" . pt-dired-regexp)
+         ("C-c a D" . pt-dired)
+         ("C-c a f" . pt-files)
+         ("C-c a k" . pt-kill-other-buffers)
+         ("C-c a K" . pt-kill-buffers))
+  :config
+  (setq pt-reuse-buffers t            ; Don't spam buffer list with ag buffers
+        pt-highlight-search t         ; A little fanciness
+        ;; Use Projectile to find the project root
+        pt-project-root-function (lambda (d) (let ((default-directory d))
+                                               (projectile-project-root)))))
+;;
+(use-package helm-pt
+  :ensure t
+  :bind (("C-c a a" . helm-do-pt)
+         ("C-c a A" . helm-pt))
+  :config (setq helm-pt-fuzzy-match t
+                helm-pt-insert-at-point 'symbol
+                helm-pt-source-type 'file-line))
+;;
 ;;; PROJECT MANAGEMENT
 ;;; Project management with Projectile
 (use-package projectile
@@ -333,7 +371,7 @@
   :defer t
   :init (with-eval-after-load 'projectile (helm-projectile-on))
   :config (setq projectile-switch-project-action #'helm-projectile))
-
+;;
 ;;; ONLINE HELP
 ;; Find function/variable definitions
 (use-package find-func
@@ -356,7 +394,7 @@
   :ensure t
   :init (helm-descbinds-mode))
 ;;; ==== COMMON SETTING ====
-
+;;
 (bind-key "C-c h b" #'describe-personal-keybindings)
 ;;
 (setq default-tab-width 4)
