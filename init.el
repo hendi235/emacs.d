@@ -104,10 +104,7 @@
 (use-package uniquify
   :config (setq uniquify-buffer-name-style 'forward))
 ;;
-;; Line number in display margin
-(use-package nlinum
-  :ensure t
-  :bind (("C-c t l" . nlinum-mode)))
+
 ;;
 ;; show column number
 (column-number-mode t)
@@ -160,20 +157,214 @@
   :ensure helm
   :defer t
   :config (setq helm-buffers-fuzzy-matching t))
-;;; ==== COMMON SETTING ====
 
-;;
-(setq default-tab-width 4)
-(setq-default indent-tabs-mode nil)
-;; avoid accidental quit
-(setq confirm-kill-emacs 'y-or-n-p)
+;;; File Handling
 ;; warn when opening files bigger than 200MB
 (setq large-file-warning-threshold 200000000)
 ;; Keep backup and auto save files out of the way
 (setq backup-directory-alist `((".*" . ,(locate-user-emacs-file ".backup")))
       auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+;; Access remote files
+(use-package tramp
+  :defer t
+  :config
+  ;; Store auto-save files locally
+  (setq tramp-auto-save-directory (locate-user-emacs-file "tramp-auto-save")))
 ;;
-;; ==== KEYBINDING ====
+;; Edit directories
+(use-package dired
+  :defer t
+  :config
+  (progn
+    (require 'dired-x)
+
+    (setq dired-auto-revert-buffer t    ; Revert on re-visiting
+          ;; Better dired flags: `-l' is mandatory, `-a' shows all files, `-h'
+          ;; uses human-readable sizes, and `-F' appends file-type classifiers
+          ;; to file names (for better highlighting)
+          dired-listing-switches "-alhF"
+          dired-ls-F-marks-symlinks t   ; -F marks links with @
+          ;; Inhibit prompts for simple recursive operations
+          dired-recursive-copies 'always)
+
+    (when (or (memq system-type '(gnu gnu/linux))
+              (string= (file-name-nondirectory insert-directory-program) "gls"))
+      ;; If we are on a GNU system or have GNU ls, add some more `ls' switches:
+      ;; `--group-directories-first' lists directories before files, and `-v'
+      ;; sorts numbers in file names naturally, i.e. "image1" goes before
+      ;; "image02"
+      (setq dired-listing-switches
+            (concat dired-listing-switches " --group-directories-first -v")))))
+;;
+;; Additional tools for Dired
+(use-package dired-x
+  :bind (("C-x C-j" . dired-jump))
+  :config
+  (progn
+    (setq dired-omit-verbose nil)        ; Shut up, dired
+
+    (when (eq system-type 'darwin)
+      ;; OS X bsdtar is mostly compatible with GNU Tar
+      (setq dired-guess-shell-gnutar "tar"))))
+;;
+;;
+(use-package helm-files
+  :ensure helm
+  :defer t
+  :config (setq helm-recentf-fuzzy-match t
+                ;; Use recentf to find recent files
+                helm-ff-file-name-history-use-recentf t
+                ;; Find library from `require', `declare-function' and friends
+                helm-ff-search-library-in-sexp t))
+;;
+;; Bookmarks for Emacs buffers
+(use-package bookmark
+  :bind (("C-c l b" . list-bookmarks))
+  ;; Save bookmarks immediately after a bookmark was added
+  :config (setq bookmark-save-flag 1))
+;;
+;; Ignore uninteresting files everywhere
+(use-package ignoramus
+  :ensure t
+  :init (ignoramus-setup))
+;;
+;; Save recently visited files
+(use-package recentf
+  :init (recentf-mode)
+  :config
+  (setq recentf-max-saved-items 200
+        recentf-max-menu-items 15
+        ;; Cleanup recent files only when Emacs is idle, but not when the mode
+        ;; is enabled, because that unnecessarily slows down Emacs. My Emacs
+        ;; idles often enough to have the recent files list clean up regularly
+        recentf-auto-cleanup 300
+        recentf-exclude (list "/\\.git/.*\\'" ; Git contents
+                              "/elpa/.*\\'" ; Package files
+                              "/itsalltext/" ; It's all text temp files
+                              ;; And all other kinds of boring files
+                              #'ignoramus-boring-p)))
+;;
+;; Save point position in files
+(use-package saveplace
+  :config (setq-default save-place t))
+;;
+;; View read-only files
+(setq view-read-only t)
+;;
+;; Auto-revert buffers of changed files
+(use-package autorevert
+  :init (global-auto-revert-mode))
+;;
+;; Visit images as images
+(use-package image-file
+  :init (auto-image-file-mode))
+
+;;; Navigation and scrolling
+; Never recenter the screen while scrolling
+(setq scroll-conservatively 1000)
+;;
+;; Fast window switching
+(use-package ace-window
+  :ensure t
+  :bind (("C-x o" . ace-window)
+         ("C-c o" . ace-window)))
+;;
+;; Line number in display margin
+(use-package nlinum
+  :ensure t
+  :bind (("C-c t l" . nlinum-mode)))
+;;
+;;; BASIC EDITING
+;;
+;; Cleanup whitespace in buffers
+(use-package whitespace-cleanup-mode
+  :ensure t
+  :bind (("C-c t c" . whitespace-cleanup-mode))
+  :init (dolist (hook '(prog-mode-hook text-mode-hook conf-mode-hook))
+          (add-hook hook #'whitespace-cleanup-mode))
+  :diminish whitespace-cleanup-mode)
+
+;;; HIGHLIGHT AND FONTIFICATION
+;; Custom regexp highlights
+(use-package hi-lock
+  :init (global-hi-lock-mode))
+
+;;; SKELETON, COMPLETION, AND EXPANSION
+;; Powerful expansion and completion
+(use-package hippie-exp
+  :bind (([remap dabbrev-expand] . hippie-expand))
+  :config
+  (setq hippie-expand-try-functions-list
+        '(try-expand-dabbrev
+          try-expand-dabbrev-all-buffers
+          try-expand-dabbrev-from-kill
+          try-complete-file-name-partially
+          try-complete-file-name
+          try-expand-all-abbrevs
+          try-expand-list
+          try-complete-lisp-symbol-partially
+          try-complete-lisp-symbol)))
+
+;;; SEARCHING
+;; Search buffers
+(use-package isearch
+  :bind (("C-c s s" . isearch-forward-symbol-at-point)))
+
+;;; PROJECT MANAGEMENT
+;;; Project management with Projectile
+(use-package projectile
+  :ensure t
+  :init (projectile-global-mode)
+  :config
+  (progn
+    ;; Remove dead projects when Emacs is idle
+    (run-with-idle-timer 10 nil #'projectile-cleanup-known-projects)
+
+    (setq projectile-completion-system 'helm
+          projectile-find-dir-includes-top-level t
+          projectile-mode-line '(:propertize
+                                 (:eval (concat " " (projectile-project-name)))
+                                 face font-lock-constant-face)))
+  :diminish projectile-mode)
+;;
+;; Projectile with steroids
+(use-package helm-projectile
+  :ensure t
+  :defer t
+  :init (with-eval-after-load 'projectile (helm-projectile-on))
+  :config (setq projectile-switch-project-action #'helm-projectile))
+
+;;; ONLINE HELP
+;; Find function/variable definitions
+(use-package find-func
+  :bind (("C-x F"   . find-function)
+         ("C-x 4 F" . find-function-other-window)
+         ("C-x K"   . find-function-on-key)
+         ("C-x V"   . find-variable)
+         ("C-x 4 V" . find-variable-other-window)))
+;;
+;; Info manual viewer
+(use-package info
+  :defer t
+  :config
+  ;; Fix the stupid `Info-quoted' face.  Courier is an abysmal face, so go back
+  ;; to the default face.
+  (set-face-attribute 'Info-quoted nil :family 'unspecified
+                      :inherit font-lock-type-face))
+;;
+(use-package helm-descbinds
+  :ensure t
+  :init (helm-descbinds-mode))
+;;; ==== COMMON SETTING ====
+
+(bind-key "C-c h b" #'describe-personal-keybindings)
+;;
+(setq default-tab-width 4)
+(setq-default indent-tabs-mode nil)
+;; avoid accidental quit
+(setq confirm-kill-emacs 'y-or-n-p)
+;;
+;; ==== GLOBAL KEYBINDING ====
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
 (global-set-key (kbd "C-M-s") 'isearch-forward)
