@@ -1,6 +1,7 @@
 ;;; ==== PACKAGE MGT ====
 ;; Please don't load outdated byte code
 (setq load-prefer-newer t)
+;;
 ;; separate file for Customize generated settings
 (setq custom-file "~/.emacs-customize")
 (when (file-exists-p custom-file)
@@ -25,6 +26,7 @@
 (require 'bind-key)
 (require 'diminish)
 ;;
+;; DEBUGGING
 ;; Search init file for bugs
 ;; usage: M-x bug-hunter-init-file RET RET
 (use-package bug-hunter
@@ -115,6 +117,7 @@
 ;; Get rid of tool bar
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
+;;
 ;;; ==== BEHAVIOR ====
 ;; Move between windows with Shift+Arrow
 (use-package windmove
@@ -297,13 +300,15 @@
   :init (dolist (hook '(prog-mode-hook text-mode-hook conf-mode-hook))
           (add-hook hook #'whitespace-cleanup-mode))
   :diminish whitespace-cleanup-mode)
-
+;;
 ;;; HIGHLIGHT AND FONTIFICATION
+;; 
 ;; Custom regexp highlights
 (use-package hi-lock
   :init (global-hi-lock-mode))
 ;;
 ;;; SKELETON, COMPLETION, AND EXPANSION
+;;
 ;; Powerful expansion and completion
 (use-package hippie-exp
   :bind (([remap dabbrev-expand] . hippie-expand))
@@ -320,6 +325,7 @@
           try-complete-lisp-symbol)))
 ;;
 ;;; SEARCHING
+;;
 ;; Search buffers
 (use-package isearch
   :bind (("C-c s s" . isearch-forward-symbol-at-point)))
@@ -339,7 +345,7 @@
         ;; Use Projectile to find the project root
         pt-project-root-function (lambda (d) (let ((default-directory d))
                                                (projectile-project-root)))))
-;;
+;; Helm interface to pt
 (use-package helm-pt
   :ensure t
   :bind (("C-c a a" . helm-do-pt)
@@ -373,6 +379,7 @@
   :config (setq projectile-switch-project-action #'helm-projectile))
 ;;
 ;;; ONLINE HELP
+;;
 ;; Find function/variable definitions
 (use-package find-func
   :bind (("C-x F"   . find-function)
@@ -393,6 +400,13 @@
 (use-package helm-descbinds
   :ensure t
   :init (helm-descbinds-mode))
+;;
+;;; MODES
+;;
+;; sl flex syntax highlight
+(use-package slflex-mode
+    :load-path "lisp/")
+;;
 ;;; ==== COMMON SETTING ====
 ;;
 (bind-key "C-c h b" #'describe-personal-keybindings)
