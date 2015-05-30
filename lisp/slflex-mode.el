@@ -2,23 +2,23 @@
 
 ;;; Code:
 
-;;(defgroup slflex nil
- ;; "Major mode for editing slflex source in Emacs."
-;;  :link '(custom-group-link :tag "Font Lock Faces group" font-lock-faces)
-;;  :group 'languages)
-;;
+(defgroup slflex nil
+  "Major mode for editing slflex source in Emacs."
+  :link '(custom-group-link :tag "Font Lock Faces group" font-lock-faces)
+  :prefix "slflex-"
+  :group 'languages)
 
-(defvar slflex-events
+(defconst slflex-events
   '("BOOLEAN" "INTEGER" "FLOAT" "STRING" "LONG" "DATE" "TIME" "ARRAY" "TRUE" "FALSE" "NULL" "ENUM" "BYTE"))
 
-(defvar slflex-keywords
+(defconst slflex-keywords
     '("IF" "END IF" "ELSIF" "ELSE" "WHILE" "END WHILE" "CASE" "END CASE" "RESULTS" "END RESULTS"
       "PARAMETERS" "END PARAMETERS" "SWITCH" "END SWITCH" "DEFAULT" "END DEFAULT"
       "OR" "AND" "LEAVE" "THEN" "DO" "OF" "SIZE" "MANDATORY" "RETURN" "EXISTS" "NOT" "INSTANCE"
       "CALL" "ADMIN" "INTERFACE" "DIV" "MOD"
       ))
 
-(defvar slflex-functions
+(defconst slflex-actions
   '("Abort" "AccessStatisticsCounter" "Addition" "AddNumberToList" "AppendAnnoForGroupCall"
     "AppendAnnouncement" "AppendClassification" "AppendMenuItem" "AppendMenuItemSelCodeList"
     "AppendValue" "ArrayCopy" "AsciiToChar" "Assignment" "Charge" "DeleteBalObject" "ReadBalance"
@@ -58,9 +58,10 @@
   `((
      ;; ; : , ; { } =>  @ $ = are all special elements
      ;;(":\\|,\\|;\\|{\\|}\\|=>\\|@\\|$\\|=" . font-lock-keyword-face)
+     ("<-\\|->\\|#\\|(\\|)\\|:=\\|/\\|<\\|>\\|=\\|*\\|-\\|+" . font-lock-builtin-face)
      ( ,(regexp-opt slflex-keywords 'words) . font-lock-builtin-face)
      ( ,(regexp-opt slflex-events 'words) . font-lock-constant-face)
-     ( ,(regexp-opt slflex-functions 'words) . font-lock-function-name-face)
+     ( ,(regexp-opt slflex-actions 'words) . font-lock-function-name-face)
      ;; Define generic acces pattern
      (,(concat "\\(theGenericAccess\\|\\<InputParameter\\|\\<tga\\|\\<CCS\\|\\<AdditionalResult\\|"
                 "\\<Counters\\|\\<CheapSpot\\|\\<FBC\\|\\<HotCharge\\|\\<OnTouch\\|\\<QoS\\|"
