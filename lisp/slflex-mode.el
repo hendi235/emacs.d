@@ -12,11 +12,11 @@
   '("BOOLEAN" "INTEGER" "FLOAT" "STRING" "LONG" "DATE" "TIME" "ARRAY" "TRUE" "FALSE" "NULL" "ENUM" "BYTE"))
 
 (defconst slflex-keywords
-    '("IF" "END IF" "ELSIF" "ELSE" "WHILE" "END WHILE" "CASE" "END CASE" "RESULTS" "END RESULTS"
-      "PARAMETERS" "END PARAMETERS" "SWITCH" "END SWITCH" "DEFAULT" "END DEFAULT"
-      "OR" "AND" "LEAVE" "THEN" "DO" "OF" "SIZE" "MANDATORY" "RETURN" "EXISTS" "NOT" "INSTANCE"
-      "CALL" "ADMIN" "INTERFACE" "DIV" "MOD"
-      ))
+    ;; Remember, order of word is important! Make sure shortest word is put on the last.
+    '("END IF" "ELSIF" "END WHILE" "END CASE" "END RESULTS" "END PARAMETERS" "END SWITCH" "END DEFAULT"
+      "NOT EXISTS" "MANDATORY" "RETURN" "EXISTS" "INSTANCE" "ADMIN" "INTERFACE"
+      "LEAVE" "DEFAULT" "SWITCH" "PARAMETERS" "RESULTS" "CASE" "WHILE" "ELSE" 
+      "CALL" "SIZE" "THEN" "DIV" "MOD" "AND" "NOT" "IF" "OR" "DO" "OF"))
 
 (defconst slflex-actions
   '("Abort" "AccessStatisticsCounter" "Addition" "AddNumberToList" "AppendAnnoForGroupCall"
@@ -69,21 +69,21 @@
                 "\\<CallSupervision\\|\\<SubsDM\\(FUS\\|DB\\)\\)[-_\\.A-Za-z0-9]+") . font-lock-warning-face)
      )))
 
-(defconst slflex-syntax-table
-  (let ((table (make-syntax-table)))
+(defvar slflex-mode-syntax-table
+  (let ((st (make-syntax-table)))
     ;; ' is a string delimiter
-    ;;(modify-syntax-entry ?' "\"" table)
+    ;;(modify-syntax-entry ?' "\"" st)
     ;; " is a string delimiter too
-    ;;(modify-syntax-entry ?\" "\"" table)
+    ;;(modify-syntax-entry ?\" "\"" st)
 
     ;; / is punctuation, but // is a comment starter
-    (modify-syntax-entry ?/ ". 12" table)
+    (modify-syntax-entry ?/ ". 12" st)
     ;; \n is a comment ender
-    (modify-syntax-entry ?\n ">" table)
-    table))
+    (modify-syntax-entry ?\n ">" st)
+    st))
 
-(define-derived-mode slflex-mode prog-mode "SL Flex Mode"
-  :syntax-table slflex-syntax-table
+(define-derived-mode slflex-modex fundamental-mode "SL Flex Mode"
+  :syntax-table slflex-mode-syntax-table
   (setq font-lock-defaults slflex-font-lock-defaults)
   (font-lock-fontify-buffer))
 
