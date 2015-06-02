@@ -20,7 +20,7 @@
    "Syntax table for `sltrace-mode'.")
 
  (defvar sltrace-font-lock-defaults
-   '(("flex>\\.\\*in\\.sub\\.\\*" (1 font-lock-function-name-face)))
+   '(("Flex>\\.\\*in\\.sub\\.\\*" (1 font-lock-function-name-face)))
    )
 
 ;; (defvar sltrace-imenu-generic-expression
