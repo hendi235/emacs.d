@@ -417,6 +417,21 @@
 (use-package sltrace-mode
     :load-path "lisp/")
 ;;
+;;
+;;; ==== MY CUSTOM FUNCTION ====
+;; Keep all your matches highlighted after searching, ala VIM. (see http://www.emacswiki.org/emacs/HighlightFromIsearch)
+(defun isearch-highlight-phrase ()
+        "Invoke `highligh-phrase' from within isearch."
+        (interactive)
+        (let ((case-fold-search isearch-case-fold-search))
+          (highlight-phrase (if isearch-regexp
+                                isearch-string
+                              (regexp-quote isearch-string)))))
+
+;; Use C-TAB to keep the highlight
+(define-key isearch-mode-map (kbd "C-<tab>") 'isearch-highlight-phrase)
+;;
+;;
 ;;; ==== COMMON SETTING ====
 ;;
 (bind-key "C-c h b" #'describe-personal-keybindings)
@@ -427,6 +442,7 @@
 (setq confirm-kill-emacs 'y-or-n-p)
 ;;
 ;; ==== GLOBAL KEYBINDING ====
+(global-set-key (kbd "C-;") 'unhighlight-regexp)
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
 (global-set-key (kbd "C-M-s") 'isearch-forward)
