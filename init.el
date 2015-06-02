@@ -34,46 +34,53 @@
 ;;
 ;;; ==== UI ====
 ;; Select best available font
-(use-package dynamic-fonts
+;; dynamic-fonts is depend on this package
+(use-package font-utils
+  :ensure t)
+;;
+(use-package dynamic-fonts              ; Select best available font
   :ensure t
   :config
   (progn
     (setq dynamic-fonts-preferred-monospace-fonts
           '(
             ;; Best fonts
-            ;"Source Code Pro"   ; https://github.com/adobe-fonts/source-code-pro
-            ;"Anonymous Pro" ; http://www.marksimonson.com/fonts/view/anonymous-pro
+            ;;"Source Code Pro"   ; https://github.com/adobe-fonts/source-code-pro
+            ;;"Anonymous Pro" ; http://www.marksimonson.com/fonts/view/anonymous-pro
             ;; Consolas and its free alternative.  Ok, but not my preference
-            ;"Inconsolata"
+            ;;"Inconsolata"
             "Consolas"
             ;; Also still kind of ok
-            "Fira Mono"
+            ;;"Fira Mono"
             ;; System fonts, as last resort
-            ;"Menlo"
-            "DejaVu Sans Mono"
+            "Menlo"
+            ;;"DejaVu Sans Mono"
             "Bitstream Vera Mono"
             "Courier New")
           dynamic-fonts-preferred-monospace-point-size (pcase system-type
                                                          (`darwin 13)
-                                                         (_ 10))
+                                                         (_ 11))
           dynamic-fonts-preferred-proportional-fonts
           '(
             ;; Best, from
             ;; https://www.mozilla.org/en-US/styleguide/products/firefox-os/typeface/
-            ;"Fira Sans"
+            ;;"Fira Sans"
             ;; System fonts, as last resort
-            "Helvetica"
+            ;;"Helvetica"
             "Segoe UI"
-            "DejaVu Sans"
-            "Bitstream Vera"
+            ;;"DejaVu Sans"
+            ;;"Bitstream Vera"
             "Tahoma"
-            "Verdana"
-            "Arial Unicode MS"
+            ;;"Verdana"
+            ;;"Arial Unicode MS"
             "Arial")
           dynamic-fonts-preferred-proportional-point-size (pcase system-type
                                                             (`darwin 13)
-                                                            (_ 10)))
+                                                            (_ 11))
+          )
+
     (dynamic-fonts-setup)))
+;;
 ;;; THEMES
 (use-package spacegray   ; current active theme
   ;:disabled t
@@ -405,6 +412,9 @@
 ;;
 ;; sl flex syntax highlight
 (use-package slflex-mode
+    :load-path "lisp/")
+
+(use-package sltrace-mode
     :load-path "lisp/")
 ;;
 ;;; ==== COMMON SETTING ====
