@@ -314,7 +314,17 @@
 ;;
 ;; SmartParens for custom parentheses
 (use-package smartparens
-    :ensure t)
+  :ensure t
+  :init (progn (smartparens-global-mode)
+               (show-smartparens-global-mode))
+  :config (setq sp-autoskip-closing-pair 'always
+                ;; Don't kill entire symbol on C-k
+                sp-hybrid-kill-entire-symbol nil)
+  :diminish smartparens-mode)
+
+(use-package myconfig-smartparens      ; Personal Smartparens extensions
+  :load-path "lisp/")
+
 ;;
 ;;; HIGHLIGHT AND FONTIFICATION
 ;; 
