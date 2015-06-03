@@ -272,7 +272,7 @@
 ;;
 ;; Visit images as images
 (use-package image-file
-  :disable t
+  :disabled t
   :init (auto-image-file-mode))
 ;;
 ;;; NAVIGATION AND SCROLL
@@ -314,9 +314,8 @@
 ;;
 ;; SmartParens for custom parentheses
 (use-package smartparens
-    :ensure t
-    :defer t
-)    
+    :ensure t)
+;;
 ;;; HIGHLIGHT AND FONTIFICATION
 ;; 
 ;; Custom regexp highlights
@@ -421,10 +420,13 @@
 ;;
 ;; sl flex syntax highlight
 (use-package slflex-mode
-    :load-path "lisp/")
+    :load-path "lisp/"
+    :config (add-to-list 'auto-mode-alist 
+                         '("\\.sl\\>" . slflex-mode))
+    )
 
-(use-package sltrace-mode
-    :load-path "lisp/")
+;;(use-package sltrace-mode
+;;    :load-path "lisp/")
 ;;
 ;;
 ;;; ==== MY CUSTOM FUNCTION ====
