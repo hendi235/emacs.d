@@ -82,7 +82,7 @@
     (modify-syntax-entry ?\n ">" st)
     st))
 
-(define-derived-mode slflex-modex fundamental-mode "SL Flex Mode"
+(define-derived-mode slflex-mode fundamental-mode "SL Flex Mode"
   :syntax-table slflex-mode-syntax-table
   (setq font-lock-defaults slflex-font-lock-defaults)
   (font-lock-fontify-buffer))
