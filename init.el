@@ -57,9 +57,11 @@
             ;;"DejaVu Sans Mono"
             "Bitstream Vera Mono"
             "Courier New")
-          dynamic-fonts-preferred-monospace-point-size (pcase system-type
-                                                         (`darwin 13)
-                                                         (_ 11))
+          ;;dynamic-fonts-preferred-monospace-point-size (pcase system-type
+          ;;                                               (`darwin 13)
+          ;;                                               (_ 11))
+          dynamic-fonts-preferred-monospace-point-size 10
+
           dynamic-fonts-preferred-proportional-fonts
           '(
             ;; Best, from
@@ -74,9 +76,10 @@
             ;;"Verdana"
             ;;"Arial Unicode MS"
             "Arial")
-          dynamic-fonts-preferred-proportional-point-size (pcase system-type
-                                                            (`darwin 13)
-                                                            (_ 11))
+         ;;dynamic-fonts-preferred-proportional-point-size (pcase system-type
+         ;;                                                   (`darwin 13)
+         ;;                                                   (_ 11))
+         dynamic-fonts-preferred-proportional-point-size 10                                                   
           )
 
     (dynamic-fonts-setup)))
@@ -269,6 +272,7 @@
 ;;
 ;; Visit images as images
 (use-package image-file
+  :disable t
   :init (auto-image-file-mode))
 ;;
 ;;; NAVIGATION AND SCROLL
@@ -308,6 +312,11 @@
           (add-hook hook #'whitespace-cleanup-mode))
   :diminish whitespace-cleanup-mode)
 ;;
+;; SmartParens for custom parentheses
+(use-package smartparens
+    :ensure t
+    :defer t
+)    
 ;;; HIGHLIGHT AND FONTIFICATION
 ;; 
 ;; Custom regexp highlights
@@ -378,7 +387,7 @@
                                  face font-lock-constant-face)))
   :diminish projectile-mode)
 ;;
-;; Projectile with steroids
+;; Projectile on steroids
 (use-package helm-projectile
   :ensure t
   :defer t
