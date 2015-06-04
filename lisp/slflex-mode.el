@@ -59,14 +59,13 @@
      ;; ; : , ; { } =>  @ $ = are all special elements
      ;;(":\\|,\\|;\\|{\\|}\\|=>\\|@\\|$\\|=" . font-lock-keyword-face)
      ("<-\\|->\\|#\\|(\\|)\\|:=\\|/\\|<\\|>\\|=\\|*\\|-\\|+" . font-lock-builtin-face)
-     ( ,(regexp-opt slflex-keywords 'words) . font-lock-builtin-face)
-     ( ,(regexp-opt slflex-events 'words) . font-lock-constant-face)
-     ( ,(regexp-opt slflex-actions 'words) . font-lock-function-name-face)
-     ;; Define generic acces pattern
      (,(concat "\\(theGenericAccess\\|\\<InputParameter\\|\\<tga\\|\\<CCS\\|\\<AdditionalResult\\|"
                 "\\<Counters\\|\\<CheapSpot\\|\\<FBC\\|\\<HotCharge\\|\\<OnTouch\\|\\<QoS\\|"
                 "\\<RatingInformation\\|\\<S[sS]7\\|\\<DTMF\\|\\<convChargingGA\\|\\<Const\\|"
-                "\\<CallSupervision\\|\\<SubsDM\\(FUS\\|DB\\)\\)[-_\\.A-Za-z0-9]+") . font-lock-warning-face)
+                "\\<CallSupervision\\|\\<SubsDM\\(FUS\\|DB\\)\\)[A-Za-z0-9\\-_\\.]+") . font-lock-type-face)     
+     ( ,(regexp-opt slflex-actions 'words) . font-lock-function-name-face)
+     ( ,(regexp-opt slflex-events 'words) . font-lock-constant-face)
+     ( ,(regexp-opt slflex-keywords 'words) . font-lock-builtin-face)
      )))
 
 (defvar slflex-mode-syntax-table
